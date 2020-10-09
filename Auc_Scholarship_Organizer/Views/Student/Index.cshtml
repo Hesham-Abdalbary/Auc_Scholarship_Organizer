@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Auc_Scholarship_Organizer.DTOs.UserDto>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>My Application</h2>
+@if (Model.Count() == 0)
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs" })
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NationalID)
+        </th>
+        <th>
+            University
+        </th>
+        <th>
+            Major
+        </th>
+        <th>
+            Gpa
+        </th>
+        <th>
+            Resume
+        </th>
+        <th>
+            Approval
+        </th>
+        <th>
+            Update Application
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NationalID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentApplication.University)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentApplication.Major)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentApplication.Gpa)
+            </td>
+            <td>
+                <a href='@item.StudentApplication.Resume' target="_blank">Download Resume</a>
+            </td>
+            @{
+                int value = item.StudentApplication.ApprovalStatus;
+                var enumDisplayStatus = (Helper.ApplicationStatus)value;
+                string stringValue = enumDisplayStatus.ToString();
+                <td>
+                    @stringValue
+                </td>
+            }
+            <td>
+                @if (Model.ToList()[0].StudentApplication.ApprovalStatus == 0)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                }
+                else
+                {
+                    <p>Application can't be modified (an admin action has been taken)</p>
+                }
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,127 @@
+﻿@model IEnumerable<Auc_Scholarship_Organizer.DTOs.UserDto>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Students Applications</h2>
+
+<br />
+
+<div>
+
+    @using (Html.BeginForm("ImportFromExcel", "SystemAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary();
+        <input type="file" name="postedFile" required="required" />
+        <br />
+        <div>
+            <input type="submit" button id="upload" value="Import Excel" class="btn btn-warning btn-xs" />
+        </div>
+    }
+</div>
+@if (ViewBag.ImportExcel != null)
+{
+    <label class="text-info" style="color:blue;">@ViewBag.ImportExcel</label>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <label class="text-danger" style="color:orangered;">@ViewBag.ErrorMessage</label>
+}
+<br />
+<div>
+    @using (Html.BeginForm("ExportToExcel", "SystemAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div>
+            <input type="submit" value="Export Excel" class="btn btn-warning btn-xs" />
+        </div>
+
+    }
+</div>
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NationalID)
+        </th>
+        <th>
+            University
+        </th>
+        <th>
+            Major
+        </th>
+        <th>
+            Gpa
+        </th>
+        <th>
+            Resume
+        </th>
+        <th>
+            Approval
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NationalID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentApplication.University)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentApplication.Major)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentApplication.Gpa)
+            </td>
+            <td>
+                <a href='@item.StudentApplication.Resume' target="_blank">Download Resume</a>
+            </td>
+            @if (item.StudentApplication.ApprovalStatus == 0)
+            {
+                <td>
+                    @Html.ActionLink("Take Action", "Edit", new { id = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                </td>
+            }
+            else
+            {
+                int value = item.StudentApplication.ApprovalStatus;
+                var enumDisplayStatus = (Helper.ApplicationStatus)value;
+                string stringValue = enumDisplayStatus.ToString();
+                <td>
+                    @stringValue
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+
